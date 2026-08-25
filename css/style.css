@@ -230,6 +230,141 @@ img, svg { max-width: 100%; }
 .avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--amber); color: var(--ink); font-family: var(--font-display); font-weight: 700; display: flex; align-items: center; justify-content: center; }
 
 
+/* =========================================
+   ANIMATED PLACEMENT CELL BACKGROUND
+   ========================================= */
+
+body {
+    position: relative;
+    min-height: 100vh;
+    background: #f5f7fb;
+    overflow-x: hidden;
+}
+
+/* Background layer */
+.animated-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 15% 20%, rgba(37, 99, 235, 0.12), transparent 30%),
+        radial-gradient(circle at 85% 30%, rgba(14, 165, 233, 0.10), transparent 30%),
+        radial-gradient(circle at 50% 90%, rgba(99, 102, 241, 0.10), transparent 35%),
+        #f5f7fb;
+}
+
+/* Moving grid */
+.grid-lines {
+    position: absolute;
+    inset: -50%;
+    width: 200%;
+    height: 200%;
+
+    background-image:
+        linear-gradient(rgba(37, 99, 235, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(37, 99, 235, 0.035) 1px, transparent 1px);
+
+    background-size: 60px 60px;
+
+    transform: rotate(-8deg);
+
+    animation: gridMove 20s linear infinite;
+}
+
+@keyframes gridMove {
+    from {
+        transform: translate(0, 0) rotate(-8deg);
+    }
+
+    to {
+        transform: translate(60px, 60px) rotate(-8deg);
+    }
+}
+
+/* Floating particles */
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(1px);
+    opacity: 0.35;
+    animation: floatParticle 10s ease-in-out infinite;
+}
+
+.p1 {
+    width: 180px;
+    height: 180px;
+    left: 8%;
+    top: 15%;
+    background: rgba(37, 99, 235, 0.15);
+    animation-duration: 12s;
+}
+
+.p2 {
+    width: 250px;
+    height: 250px;
+    right: 5%;
+    top: 20%;
+    background: rgba(14, 165, 233, 0.12);
+    animation-duration: 15s;
+    animation-delay: -3s;
+}
+
+.p3 {
+    width: 140px;
+    height: 140px;
+    left: 35%;
+    bottom: 10%;
+    background: rgba(99, 102, 241, 0.12);
+    animation-duration: 11s;
+    animation-delay: -5s;
+}
+
+.p4 {
+    width: 100px;
+    height: 100px;
+    right: 30%;
+    top: 50%;
+    background: rgba(59, 130, 246, 0.10);
+    animation-duration: 14s;
+    animation-delay: -2s;
+}
+
+.p5 {
+    width: 220px;
+    height: 220px;
+    left: -50px;
+    bottom: -50px;
+    background: rgba(14, 165, 233, 0.10);
+    animation-duration: 16s;
+}
+
+@keyframes floatParticle {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    25% {
+        transform: translate(30px, -25px) scale(1.05);
+    }
+
+    50% {
+        transform: translate(-20px, -50px) scale(0.95);
+    }
+
+    75% {
+        transform: translate(40px, -20px) scale(1.08);
+    }
+}
+
+/* Keep website content above background */
+.site-header,
+.page-body,
+.site-footer {
+    position: relative;
+    z-index: 1;
+}
+
 /* =====================================================
    Recruiter Dashboard
 ===================================================== */
@@ -456,13 +591,7 @@ body{
 
 }
 
-.btn-outline:hover{
 
-    background:#213d73;
-
-    color:white;
-
-}
 
 /* ================= TABLE ================= */
 
