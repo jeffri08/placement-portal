@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="placementApp">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resume Builder — Ridgeview College Placement Cell</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-require-role="student">
+<script src="js/auth.js"></script>
+
+<!-- AngularJS core (added) -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+
+<header class="site-header">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <span class="badge">RC</span>
+      <span class="brand-text">Ridgeview Placement Cell<small>Student &amp; Recruiter Portal</small></span>
+    </a>
+    <nav class="tab-nav"><a href="index.html" class="">Home</a><a href="about.html" class="">About</a><a href="jobs.html" class="">Jobs</a><a href="drives.html" class="">Drives</a><a href="help.html" class="">Help</a></nav>
+    <div class="nav-cta">
+      <a href="notifications.html" class="btn btn-outline on-dark btn-sm">Notifications</a>
+        <a href="student-dashboard.html" class="avatar" style="width:36px;height:36px;font-size:.85rem;" title="Ananya Rao">AR</a>
+      <button class="hamburger btn btn-outline on-dark btn-sm" aria-label="Menu">&#9776;</button>
+    </div>
+  </div>
+</header>
+<main class="page-body">
+<div class="wrap">
+
+<div class="dash">
+  
+<div class="side-nav">
+  <a href="student-dashboard.html" class="">Overview</a>
+  <a href="student-dashboard.html#applications" class="">Applications</a>
+  <a href="profile.html" class="">Profile</a>
+  <a href="resume-builder.html" class="active">Resume builder</a>
+  <a href="notifications.html" class="">Notifications</a>
+  <a href="drives.html" class="">Drive calendar</a>
+</div>
+
+  <div>
+    <div class="eyebrow">Resume builder</div>
+    <h1>Keep one resume, current everywhere.</h1>
+    <p style="color:var(--ink-soft);">Edit the fields on the left; the sheet on the right is what recruiters download.</p>
+
+    <div class="grid-2" style="align-items:start;margin-top:10px;">
+      <form data-auth-form="resume" class="sheet" novalidate>
+        <h3 style="margin-bottom:14px;">Summary</h3>
+        <div class="field"><label>Headline</label><input type="text" name="headline" placeholder="e.g. B.Tech CSE student, full-stack &amp; systems" data-validate="required"></div>
+        <div class="field"><label>Short summary</label><textarea name="summary" rows="3" placeholder="Two or three sentences on your focus and strengths." data-validate="required"></textarea></div>
+
+        <h3 style="margin:22px 0 14px;">Experience</h3>
+        <div class="field"><label>Role</label><input type="text" name="expRole" placeholder="e.g. Backend Engineering Intern, Kestrel Labs" data-validate="required"></div>
+        <div class="field"><label>Details</label><textarea name="expDetails" rows="3" placeholder="What you built and the impact it had." data-validate="required"></textarea></div>
+
+        <h3 style="margin:22px 0 14px;">Education</h3>
+        <div class="field"><label>Degree</label><input type="text" name="degree" placeholder="e.g. B.Tech, Computer Science &amp; Engineering &middot; Ridgeview College &middot; 2023&ndash;2027" data-validate="required"></div>
+
+        <button type="submit" class="btn btn-primary">Save resume</button>
+        <div data-submit-note class="callout" style="display:none;margin-top:16px;"></div>
+      </form>
+
+      <div class="panel" style="font-family:var(--font-body);">
+        <h3 style="border-bottom:2px solid var(--ink);padding-bottom:10px;" data-auth-text="name">—</h3>
+        <p class="mono" style="font-size:.78rem;color:var(--ink-soft);margin-top:-8px;"><span data-auth-text="email"></span> <span id="resumePhoneSep"></span> <span data-auth-text="phone"></span></p>
+        <p style="font-size:.88rem;color:var(--ink-soft);"><strong id="prevHeadline">Fill in the form to build your resume.</strong> <span id="prevSummary"></span></p>
+        <p class="mono" style="font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--amber-deep);margin-bottom:4px;">Experience</p>
+        <p style="font-size:.86rem;margin-bottom:16px;"><strong id="prevExpRole"></strong><br><span id="prevExpDetails"></span></p>
+        <p class="mono" style="font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--amber-deep);margin-bottom:4px;">Education</p>
+        <p style="font-size:.86rem;margin-bottom:16px;" id="prevDegree"></p>
+        <p class="mono" style="font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--amber-deep);margin-bottom:4px;">Skills</p>
+        <div class="tag-row" id="prevSkills"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var form = document.querySelector('form[data-auth-form="resume"]');
+  var session = PortalAuth.getSession();
+  var saved = (session && session.resume) || {};
+
+  // pre-fill the form from anything saved before
+  Object.keys(saved).forEach(function (key) {
+    if (form[key]) form[key].value = saved[key];
+  });
+
+  var sep = document.getElementById('resumePhoneSep');
+  if (session && session.email && session.phone) sep.textContent = '\u00B7';
+
+  function syncPreview() {
+    document.getElementById('prevHeadline').textContent = form.headline.value || 'Your headline goes here.';
+    document.getElementById('prevSummary').textContent = form.summary.value;
+    document.getElementById('prevExpRole').textContent = form.expRole.value;
+    document.getElementById('prevExpDetails').textContent = form.expDetails.value;
+    document.getElementById('prevDegree').textContent = form.degree.value;
+    var skillsWrap = document.getElementById('prevSkills');
+    skillsWrap.innerHTML = '';
+    ((session && session.skills) || '').split(',').map(function (s) { return s.trim(); }).filter(Boolean).forEach(function (skill) {
+      var pill = document.createElement('span');
+      pill.className = 'pill';
+      pill.textContent = skill;
+      skillsWrap.appendChild(pill);
+    });
+  }
+  syncPreview();
+  form.addEventListener('input', syncPreview);
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (window.PortalValidation && !PortalValidation.validateForm(form)) return;
+
+    var result = PortalAuth.updateCurrentUser({
+      resume: {
+        headline: form.headline.value,
+        summary: form.summary.value,
+        expRole: form.expRole.value,
+        expDetails: form.expDetails.value,
+        degree: form.degree.value
+      },
+      resumeName: (session.name || 'resume').replace(/\s+/g, '_') + '_Resume.pdf'
+    });
+    var note = form.querySelector('[data-submit-note]');
+    if (!result.ok) {
+      note.className = 'callout callout-error';
+      note.textContent = result.error;
+      note.style.display = 'block';
+      return;
+    }
+    note.className = 'callout callout-success';
+    note.textContent = 'Resume saved to your profile.';
+    note.style.display = 'block';
+  });
+});
+</script>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <span class="brand-text" style="color:#fff;">Ridgeview Placement Cell</span>
+      <p style="margin-top:10px;max-width:260px;">The office coordinating internships, placement drives and recruiter relations for every graduating batch.</p>
+    </div>
+    <div>
+      <h4>Portal</h4>
+      <a href="jobs.html">Open roles</a>
+      <a href="drives.html">Upcoming drives</a>
+      <a href="student-dashboard.html">Student dashboard</a>
+    </div>
+    <div>
+      <h4>Recruiters</h4>
+      <a href="admin-dashboard.html">Admin console</a>
+      <a href="admin-companies.html">Manage companies</a>
+      <a href="help.html">Recruiter guidelines</a>
+    </div>
+    <div>
+      <h4>Support</h4>
+      <a href="help.html">FAQ</a>
+      <a href="help.html#contact">Contact the cell</a>
+      <a href="about.html">About us</a>
+    </div>
+  </div>
+  <div class="footer-bottom">Placement Cell Office, Block C, Ridgeview College &middot; Mon&ndash;Sat 9:00&ndash;17:30 &middot; Reg. Portal v3.2</div>
+</footer>
+<script src="js/main.js"></script>
+<script src="js/validation.js"></script>
+
+<!-- Angular user-defined services (added) -->
+<!--
+  These services mirror the logic already running in the vanilla-JS block
+  above (session/resume state, live preview formatting, skill-pill parsing)
+  but don't replace or call into it — the existing DOMContentLoaded script,
+  PortalAuth, and PortalValidation continue to run exactly as before. This
+  is a parallel, ready-to-use service layer for whenever the form/preview
+  gets migrated to Angular bindings.
+-->
+<script>
+  angular.module('placementApp', [])
+
+    .service('ResumeService', ['$window', function ($window) {
+      var FIELDS = ['headline', 'summary', 'expRole', 'expDetails', 'degree'];
+
+      this.getSavedResume = function () {
+        var session = $window.PortalAuth && $window.PortalAuth.getSession();
+        return (session && session.resume) || {};
+      };
+
+      this.getFieldNames = function () {
+        return FIELDS.slice();
+      };
+
+      this.buildResumePayload = function (formValues) {
+        var payload = {};
+        FIELDS.forEach(function (key) {
+          payload[key] = formValues[key] || '';
+        });
+        return payload;
+      };
+
+      this.buildResumeFileName = function (studentName) {
+        return (studentName || 'resume').replace(/\s+/g, '_') + '_Resume.pdf';
+      };
+    }])
+
+    .service('ResumePreviewService', [function () {
+      this.headlineOrPlaceholder = function (headline) {
+        return headline || 'Your headline goes here.';
+      };
+
+      this.parseSkills = function (skillsString) {
+        return (skillsString || '')
+          .split(',')
+          .map(function (s) { return s.trim(); })
+          .filter(Boolean);
+      };
+    }]);
+</script>
+
+</body>
+</html>

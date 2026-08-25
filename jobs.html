@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="placementApp">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Open Roles — Ridgeview College Placement Cell</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<script src="js/auth.js"></script>
+<header class="site-header">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <span class="badge">RC</span>
+      <span class="brand-text">Ridgeview Placement Cell<small>Student &amp; Recruiter Portal</small></span>
+    </a>
+    <nav class="tab-nav"><a href="index.html" class="">Home</a><a href="about.html" class="">About</a><a href="jobs.html" class="active">Jobs</a><a href="drives.html" class="">Drives</a><a href="help.html" class="">Help</a></nav>
+    <div class="nav-cta">
+      <a href="login.html" class="btn btn-outline on-dark btn-sm">Log in</a>
+        <a href="register.html" class="btn btn-primary btn-sm">Register</a>
+      <button class="hamburger btn btn-outline on-dark btn-sm" aria-label="Menu">&#9776;</button>
+    </div>
+  </div>
+</header>
+<main class="page-body">
+<div class="wrap">
+
+<div ng-controller="JobsController">
+
+  <div class="eyebrow">Open roles</div>
+  <h1>Every active file, one shelf.</h1>
+  <p style="color:var(--ink-soft);max-width:560px;">Filter by branch or role type. Applying takes you straight to your file &mdash; no need to re-enter your resume.</p>
+
+  <div class="panel" style="margin:24px 0 30px;">
+    <div class="field-row" style="grid-template-columns:1fr 1fr 1fr;">
+      <div class="field mb-0"><label>Branch</label>
+        <select ng-model="branchFilter">
+          <option value="">All branches</option>
+          <option value="cse">CSE / IT</option>
+          <option value="ece">Electronics</option>
+          <option value="mech">Mechanical / Production</option>
+          <option value="all branches">Open to all</option>
+        </select>
+      </div>
+      <div class="field mb-0"><label>Role type</label>
+        <select ng-model="typeFilter">
+          <option value="">All types</option>
+          <option value="software">Software</option>
+          <option value="analytics">Analytics</option>
+          <option value="core">Core / Operations</option>
+          <option value="finance">Finance</option>
+        </select>
+      </div>
+      <div class="field mb-0"><label>Search company or role</label>
+        <input type="text" ng-model="searchText" placeholder="e.g. Meridian, analyst">
+      </div>
+    </div>
+  </div>
+
+  <p class="mono" style="font-size:.8rem;color:var(--ink-soft);margin-bottom:16px;">
+    Showing <span ng-bind="(jobs | filter: matchesFilters).length"></span> of <span ng-bind="jobs.length"></span> open files &mdash;
+    <a href="#" ng-click="branchFilter=''; typeFilter=''; searchText=''">reset filters</a>
+  </p>
+
+  <div class="folder-grid">
+    <a href="job-details.html" class="folder" ng-repeat="job in jobs | filter: matchesFilters" data-tab="{{job.file}}">
+      <span class="stamp {{job.statusClass}}" style="position:absolute;top:14px;right:14px;" ng-bind="job.status"></span>
+      <div class="co">
+        <span class="co-mark" ng-bind="job.mark"></span>
+        <div><strong ng-bind="job.company"></strong><div class="mono" style="font-size:.72rem;color:var(--ink-soft);" ng-bind="job.category"></div></div>
+      </div>
+      <div class="role" ng-bind="job.role"></div>
+      <div class="meta"><span ng-bind="job.ctc"></span><span>&middot;</span><span ng-bind="job.branchLabel"></span><span>&middot;</span><span ng-bind="job.location"></span></div>
+      <p class="desc" ng-bind="job.desc"></p>
+      <div class="folder-foot"><span class="pill" ng-bind="job.cgpa"></span><span class="mono" style="font-size:.75rem;" ng-bind="job.closes"></span></div>
+    </a>
+  </div>
+
+  <p class="callout" ng-if="(jobs | filter: matchesFilters).length === 0">No open files match those filters right now &mdash; try clearing one of them.</p>
+
+</div>
+
+</div>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <span class="brand-text" style="color:#fff;">Ridgeview Placement Cell</span>
+      <p style="margin-top:10px;max-width:260px;">The office coordinating internships, placement drives and recruiter relations for every graduating batch.</p>
+    </div>
+    <div>
+      <h4>Portal</h4>
+      <a href="jobs.html">Open roles</a>
+      <a href="drives.html">Upcoming drives</a>
+      <a href="student-dashboard.html">Student dashboard</a>
+    </div>
+    <div>
+      <h4>Recruiters</h4>
+      <a href="admin-dashboard.html">Admin console</a>
+      <a href="admin-companies.html">Manage companies</a>
+      <a href="help.html">Recruiter guidelines</a>
+    </div>
+    <div>
+      <h4>Support</h4>
+      <a href="help.html">FAQ</a>
+      <a href="help.html#contact">Contact the cell</a>
+      <a href="about.html">About us</a>
+    </div>
+  </div>
+  <div class="footer-bottom">Placement Cell Office, Block C, Ridgeview College &middot; Mon&ndash;Sat 9:00&ndash;17:30 &middot; Reg. Portal v3.2</div>
+</footer>
+<script src="js/main.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+<script src="js/angular-app.js"></script>
+</body>
+</html>

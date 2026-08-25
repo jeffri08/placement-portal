@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apply — Meridian Tech — Ridgeview College Placement Cell</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-require-role="student">
+<script src="js/auth.js"></script>
+<header class="site-header">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <span class="badge">RC</span>
+      <span class="brand-text">Ridgeview Placement Cell<small>Student &amp; Recruiter Portal</small></span>
+    </a>
+    <nav class="tab-nav"><a href="index.html" class="">Home</a><a href="about.html" class="">About</a><a href="jobs.html" class="active">Jobs</a><a href="drives.html" class="">Drives</a><a href="help.html" class="">Help</a></nav>
+    <div class="nav-cta">
+      <a href="notifications.html" class="btn btn-outline on-dark btn-sm">Notifications</a>
+        <a href="student-dashboard.html" class="avatar" style="width:36px;height:36px;font-size:.85rem;" title="Ananya Rao">AR</a>
+      <button class="hamburger btn btn-outline on-dark btn-sm" aria-label="Menu">&#9776;</button>
+    </div>
+  </div>
+</header>
+<main class="page-body">
+<div class="wrap">
+
+<a href="job-details.html" class="mono" style="font-size:.8rem;color:var(--ink-soft);">&larr; Back to File 118-A</a>
+<div class="eyebrow" style="margin-top:16px;">Application &middot; File 118-A</div>
+<h1>Apply to Meridian Tech.</h1>
+<p style="color:var(--ink-soft);max-width:560px;">Confirm the details pulled from your student file before submitting. Everything below can be edited from your profile later.</p>
+
+<div class="sheet wide" style="margin-top:26px;">
+  <form data-auth-form="apply" novalidate>
+    <h3 style="margin-bottom:16px;">From your file</h3>
+    <div class="field-row">
+      <div class="field"><label>Name</label><input type="text" data-auth-value="name" disabled></div>
+      <div class="field"><label>Roll number</label><input type="text" data-auth-value="rollNumber" disabled></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Branch</label><input type="text" data-auth-value="branch" disabled></div>
+      <div class="field"><label>CGPA</label><input type="text" data-auth-value="cgpa" disabled></div>
+    </div>
+    <div class="field"><label>Resume on file</label><input type="text" data-auth-value="resumeName" disabled></div>
+
+    <h3 style="margin:26px 0 16px;">For this application</h3>
+    <div class="field"><label>Why this role? (shown to the recruiter, optional)</label>
+      <textarea name="note" rows="4" placeholder="A short note on why you're applying &mdash; two or three sentences is plenty."></textarea>
+    </div>
+    <label class="checkline" style="margin-bottom:22px;"><input type="checkbox" name="confirmFinal" data-validate="required"> I understand this application is final once submitted and cannot be withdrawn after shortlisting.</label>
+    <button type="submit" class="btn btn-primary">Submit application</button>
+    <div data-submit-note class="callout" style="display:none;margin-top:16px;"></div>
+  </form>
+</div>
+</div>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var form = document.querySelector('form[data-auth-form="apply"]');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (window.PortalValidation && !PortalValidation.validateForm(form)) return;
+
+    var session = PortalAuth.getSession();
+    var applications = (session && session.applications) || [];
+    applications.push({
+      company: 'Meridian Tech',
+      role: 'Software Engineer — New Grad',
+      note: form.note.value,
+      appliedAt: new Date().toISOString(),
+      status: 'Applied'
+    });
+    PortalAuth.updateCurrentUser({ applications: applications });
+
+    var note = form.querySelector('[data-submit-note]');
+    note.className = 'callout callout-success';
+    note.innerHTML = 'Application submitted. It now shows as <strong>Applied</strong> on your <a href="student-dashboard.html">dashboard</a>.';
+    note.style.display = 'block';
+    note.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    form.querySelector('button[type="submit"]').disabled = true;
+  });
+});
+</script>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <span class="brand-text" style="color:#fff;">Ridgeview Placement Cell</span>
+      <p style="margin-top:10px;max-width:260px;">The office coordinating internships, placement drives and recruiter relations for every graduating batch.</p>
+    </div>
+    <div>
+      <h4>Portal</h4>
+      <a href="jobs.html">Open roles</a>
+      <a href="drives.html">Upcoming drives</a>
+      <a href="student-dashboard.html">Student dashboard</a>
+    </div>
+    <div>
+      <h4>Recruiters</h4>
+      <a href="admin-dashboard.html">Admin console</a>
+      <a href="admin-companies.html">Manage companies</a>
+      <a href="help.html">Recruiter guidelines</a>
+    </div>
+    <div>
+      <h4>Support</h4>
+      <a href="help.html">FAQ</a>
+      <a href="help.html#contact">Contact the cell</a>
+      <a href="about.html">About us</a>
+    </div>
+  </div>
+  <div class="footer-bottom">Placement Cell Office, Block C, Ridgeview College &middot; Mon&ndash;Sat 9:00&ndash;17:30 &middot; Reg. Portal v3.2</div>
+</footer>
+<script src="js/main.js"></script>
+<script src="js/validation.js"></script>
+</body>
+</html>

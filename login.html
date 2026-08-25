@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log in — Ridgeview College Placement Cell</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<script src="js/auth.js"></script>
+<header class="site-header">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <span class="badge">RC</span>
+      <span class="brand-text">Ridgeview Placement Cell<small>Student &amp; Recruiter Portal</small></span>
+    </a>
+    <nav class="tab-nav"><a href="index.html" class="active">Home</a><a href="about.html" class="">About</a><a href="jobs.html" class="">Jobs</a><a href="drives.html" class="">Drives</a><a href="help.html" class="">Help</a></nav>
+    <div class="nav-cta">
+      <a href="login.html" class="btn btn-outline on-dark btn-sm">Log in</a>
+        <a href="register.html" class="btn btn-primary btn-sm">Register</a>
+      <button class="hamburger btn btn-outline on-dark btn-sm" aria-label="Menu">&#9776;</button>
+    </div>
+  </div>
+</header>
+<main class="page-body">
+<div class="wrap">
+
+<div class="center" style="max-width:620px;margin:0 auto;">
+  <div class="eyebrow" style="justify-content:center;">Sign in</div>
+  <h1>Open your file.</h1>
+  <p style="color:var(--ink-soft);">Sign in to check application status, drive schedules and offers.</p>
+</div>
+
+<div class="sheet" style="margin:30px auto 0;" data-tabgroup>
+  <div style="display:flex;gap:8px;margin-bottom:22px;" id="loginRoleTabs">
+    <button type="button" class="btn btn-sm tab-role-btn" data-tabbtn="student" data-selected="true">Student</button>
+    <button type="button" class="btn btn-sm tab-role-btn" data-tabbtn="recruiter" data-selected="false">Recruiter</button>
+    <button type="button" class="btn btn-sm tab-role-btn" data-tabbtn="admin" data-selected="false">Placement cell</button>
+  </div>
+
+  <form data-auth-form="login" novalidate>
+    <input type="hidden" name="role" value="student">
+    <div class="field">
+      <label>Roll number or email</label>
+      <input type="text" name="identifier" placeholder="e.g. 22CS1042 or you@ridgeview.edu.in" data-validate="required">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" name="password" placeholder="Enter your password" data-validate="required">
+    </div>
+    <div class="checkline" style="justify-content:space-between;margin-bottom:20px;">
+      <label class="checkline"><input type="checkbox"> Keep me signed in</label>
+      <a href="#" class="mono" style="font-size:.8rem;">Forgot password?</a>
+    </div>
+    <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+    <div data-submit-note class="callout" style="display:none;margin-top:16px;"></div>
+  </form>
+</div>
+<p class="center mono" style="font-size:.82rem;color:var(--ink-soft);margin-top:20px;">New to the portal? <a href="register.html">Register your student file</a></p>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('#loginRoleTabs [data-tabbtn]');
+  var form = document.querySelector('form[data-auth-form="login"]');
+  var roleInput = form.querySelector('input[name="role"]');
+  var identifierField = form.querySelector('input[name="identifier"]');
+  var identifierLabel = identifierField.closest('.field').querySelector('label');
+
+  tabs.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      tabs.forEach(function (b) { b.setAttribute('data-selected', 'false'); });
+      btn.setAttribute('data-selected', 'true');
+      var role = btn.getAttribute('data-tabbtn');
+      roleInput.value = role;
+      if (role === 'student') {
+        identifierLabel.textContent = 'Roll number or email';
+        identifierField.placeholder = 'e.g. 22CS1042 or you@ridgeview.edu.in';
+      } else {
+        identifierLabel.textContent = 'Name or work email';
+        identifierField.placeholder = 'e.g. Priya Sharma or priya@company.com';
+      }
+    });
+  });
+
+  var existing = PortalAuth.getSession();
+  if (existing) {
+    var note = form.querySelector('[data-submit-note]');
+    note.className = 'callout';
+    note.innerHTML = 'You\u2019re already signed in as <strong>' + existing.name + '</strong>. <a href="' +
+      (existing.role === 'student' ? 'student-dashboard.html' : 'admin-dashboard.html') + '">Go to your dashboard &rarr;</a>';
+    note.style.display = 'block';
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (window.PortalValidation && !PortalValidation.validateForm(form)) return;
+
+    var result = PortalAuth.login(identifierField.value, form.password.value, roleInput.value);
+    var note = form.querySelector('[data-submit-note]');
+    if (!result.ok) {
+      note.className = 'callout callout-error';
+      note.textContent = result.error;
+      note.style.display = 'block';
+      return;
+    }
+    var params = new URLSearchParams(location.search);
+var redirect = params.get('redirect');
+
+var dest;
+
+if (redirect) {
+
+    dest = redirect;
+
+}
+else if (result.user.role === "student") {
+
+    dest = "student-dashboard.html";
+
+}
+else if (result.user.role === "recruiter") {
+
+    dest = "recruiter-dashboard.html";
+
+}
+else if (result.user.role === "admin") {
+
+    dest = "admin-dashboard.html";
+
+}
+else {
+
+    dest = "index.html";
+
+}
+
+location.href = dest;
+  });
+});
+</script>
+</div>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <span class="brand-text" style="color:#fff;">Ridgeview Placement Cell</span>
+      <p style="margin-top:10px;max-width:260px;">The office coordinating internships, placement drives and recruiter relations for every graduating batch.</p>
+    </div>
+    <div>
+      <h4>Portal</h4>
+      <a href="jobs.html">Open roles</a>
+      <a href="drives.html">Upcoming drives</a>
+      <a href="student-dashboard.html">Student dashboard</a>
+    </div>
+    <div>
+      <h4>Recruiters</h4>
+      <a href="admin-dashboard.html">Admin console</a>
+      <a href="admin-companies.html">Manage companies</a>
+      <a href="help.html">Recruiter guidelines</a>
+    </div>
+    <div>
+      <h4>Support</h4>
+      <a href="help.html">FAQ</a>
+      <a href="help.html#contact">Contact the cell</a>
+      <a href="about.html">About us</a>
+    </div>
+  </div>
+  <div class="footer-bottom">Placement Cell Office, Block C, Ridgeview College &middot; Mon&ndash;Sat 9:00&ndash;17:30 &middot; Reg. Portal v3.2</div>
+</footer>
+<script src="js/main.js"></script>
+<script src="js/validation.js"></script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Companies — Ridgeview College Placement Cell</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-require-role="recruiter,admin">
+<script src="js/auth.js"></script>
+<header class="site-header">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <span class="badge">RC</span>
+      <span class="brand-text">Ridgeview Placement Cell<small>Placement Cell — Admin Console</small></span>
+    </a>
+    <nav class="tab-nav"><a href="index.html" class="">Home</a><a href="about.html" class="">About</a><a href="jobs.html" class="">Jobs</a><a href="drives.html" class="">Drives</a><a href="help.html" class="">Help</a></nav>
+    <div class="nav-cta">
+      <a href="index.html" class="btn btn-outline on-dark btn-sm">Exit admin</a>
+        <a href="admin-dashboard.html" class="avatar" style="width:36px;height:36px;font-size:.85rem;background:#c8d0e0;" title="Placement Cell Admin">PC</a>
+      <button class="hamburger btn btn-outline on-dark btn-sm" aria-label="Menu">&#9776;</button>
+    </div>
+  </div>
+</header>
+<main class="page-body">
+<div class="wrap">
+
+<div class="dash">
+  
+<div class="side-nav">
+  <a href="admin-dashboard.html" class="">Overview</a>
+  <a href="admin-companies.html" class="active">Companies</a>
+  <a href="admin-dashboard.html#students" class="">Students</a>
+  <a href="drives.html" class="">Drive calendar</a>
+  <a href="admin-dashboard.html#reports" class="">Reports</a>
+</div>
+
+  <div>
+    <div class="eyebrow">Recruiter files</div>
+    <h1>Manage companies.</h1>
+
+    <div class="table-scroll" style="margin-bottom:30px;">
+      <table class="ledger">
+        <thead><tr><th>Company</th><th>Role posted</th><th>CTC</th><th>Applications</th><th>Drive date</th><th>Status</th></tr></thead>
+        <tbody id="companyTableBody">
+          <tr><td>Meridian Tech</td><td>Software Engineer</td><td>&#8377;18&ndash;22 LPA</td><td>412</td><td class="mono">30 Jul</td><td><span class="stamp stamp-open">Active</span></td></tr>
+          <tr><td>Harborview Analytics</td><td>Data Analyst Trainee</td><td>&#8377;9&ndash;11 LPA</td><td>298</td><td class="mono">6 Aug</td><td><span class="stamp stamp-open">Active</span></td></tr>
+          <tr><td>Fenwick Logistics</td><td>Ops Management Trainee</td><td>&#8377;7.2 LPA</td><td>150</td><td class="mono">14 Aug</td><td><span class="stamp stamp-open">Active</span></td></tr>
+          <tr><td>QuantStack</td><td>Backend Developer</td><td>&#8377;24 LPA</td><td>380</td><td class="mono">8 Aug</td><td><span class="stamp stamp-open">Active</span></td></tr>
+          <tr><td>Orbitpoint Semiconductors</td><td>VLSI Design Engineer</td><td>&#8377;15 LPA</td><td>176</td><td class="mono">15 Jul</td><td><span class="stamp stamp-closed">Closed</span></td></tr>
+          <tr><td>Claremont Capital</td><td>Financial Analyst</td><td>&#8377;12 LPA</td><td>221</td><td class="mono">22 Aug</td><td><span class="stamp stamp-open">Active</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sheet wide">
+      <h3 style="margin-bottom:16px;">Add a new company</h3>
+      <form data-auth-form="company" novalidate>
+        <div class="field-row">
+          <div class="field"><label>Company name</label><input type="text" name="companyName" placeholder="e.g. Northgate Systems" data-validate="required"></div>
+          <div class="field"><label>Recruiter contact email</label><input type="email" name="recruiterEmail" placeholder="hr@company.com" data-validate="required email"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Role title</label><input type="text" name="roleTitle" placeholder="e.g. Graduate Engineer Trainee" data-validate="required"></div>
+          <div class="field"><label>CTC offered</label><input type="text" name="ctc" placeholder="e.g. 10 LPA" data-validate="required"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Eligible branches</label><input type="text" name="branches" placeholder="e.g. CSE, IT, ECE" data-validate="required"></div>
+          <div class="field"><label>Minimum CGPA</label><input type="text" name="minCgpa" placeholder="e.g. 7.0" data-validate="required cgpa"></div>
+        </div>
+        <div class="field"><label>Proposed drive date</label><input type="date" name="driveDate" data-validate="required futureDate"></div>
+        <button type="submit" class="btn btn-primary">Add company file</button>
+        <div data-submit-note class="callout" style="display:none;margin-top:16px;"></div>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var STORAGE_KEY = 'rc_portal_companies';
+  var tbody = document.getElementById('companyTableBody');
+
+  function loadExtra() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch (e) { return []; }
+  }
+  function saveExtra(list) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+  }
+  function renderRow(c) {
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td></td><td></td><td></td><td>0</td><td class="mono"></td><td><span class="stamp stamp-open">Active</span></td>';
+    tr.children[0].textContent = c.companyName;
+    tr.children[1].textContent = c.roleTitle;
+    tr.children[2].textContent = c.ctc;
+    tr.children[4].textContent = c.driveDate;
+    tbody.appendChild(tr);
+  }
+  loadExtra().forEach(renderRow);
+
+  var form = document.querySelector('form[data-auth-form="company"]');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (window.PortalValidation && !PortalValidation.validateForm(form)) return;
+
+    var company = {
+      companyName: form.companyName.value,
+      recruiterEmail: form.recruiterEmail.value,
+      roleTitle: form.roleTitle.value,
+      ctc: form.ctc.value,
+      branches: form.branches.value,
+      minCgpa: form.minCgpa.value,
+      driveDate: form.driveDate.value
+    };
+    var extra = loadExtra();
+    extra.push(company);
+    saveExtra(extra);
+    renderRow(company);
+
+    var note = form.querySelector('[data-submit-note]');
+    note.className = 'callout callout-success';
+    note.textContent = company.companyName + ' added to the companies ledger.';
+    note.style.display = 'block';
+    form.reset();
+  });
+});
+</script>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <span class="brand-text" style="color:#fff;">Ridgeview Placement Cell</span>
+      <p style="margin-top:10px;max-width:260px;">The office coordinating internships, placement drives and recruiter relations for every graduating batch.</p>
+    </div>
+    <div>
+      <h4>Portal</h4>
+      <a href="jobs.html">Open roles</a>
+      <a href="drives.html">Upcoming drives</a>
+      <a href="student-dashboard.html">Student dashboard</a>
+    </div>
+    <div>
+      <h4>Recruiters</h4>
+      <a href="admin-dashboard.html">Admin console</a>
+      <a href="admin-companies.html">Manage companies</a>
+      <a href="help.html">Recruiter guidelines</a>
+    </div>
+    <div>
+      <h4>Support</h4>
+      <a href="help.html">FAQ</a>
+      <a href="help.html#contact">Contact the cell</a>
+      <a href="about.html">About us</a>
+    </div>
+  </div>
+  <div class="footer-bottom">Placement Cell Office, Block C, Ridgeview College &middot; Mon&ndash;Sat 9:00&ndash;17:30 &middot; Reg. Portal v3.2</div>
+</footer>
+<script src="js/main.js"></script>
+<script src="js/validation.js"></script>
+</body>
+</html>

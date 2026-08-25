@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="placementApp">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drive Calendar — Ridgeview College Placement Cell</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<script src="js/auth.js"></script>
+<header class="site-header">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <span class="badge">RC</span>
+      <span class="brand-text">Ridgeview Placement Cell<small>Student &amp; Recruiter Portal</small></span>
+    </a>
+    <nav class="tab-nav"><a href="index.html" class="">Home</a><a href="about.html" class="">About</a><a href="jobs.html" class="">Jobs</a><a href="drives.html" class="active">Drives</a><a href="help.html" class="">Help</a></nav>
+    <div class="nav-cta">
+      <a href="login.html" class="btn btn-outline on-dark btn-sm">Log in</a>
+        <a href="register.html" class="btn btn-primary btn-sm">Register</a>
+      <button class="hamburger btn btn-outline on-dark btn-sm" aria-label="Menu">&#9776;</button>
+    </div>
+  </div>
+</header>
+<main class="page-body">
+<div class="wrap">
+
+<div ng-controller="DrivesController">
+
+  <div class="eyebrow">Drive calendar</div>
+  <h1>Every recruiter visit, dated.</h1>
+  <p style="color:var(--ink-soft);max-width:560px;">Test and interview dates are added as recruiters confirm them. Times are shown in IST.</p>
+
+  <div class="panel" style="margin:22px 0 6px;">
+    <div class="field-row" style="grid-template-columns:1fr 1fr;">
+      <div class="field mb-0"><label>Filter by status</label>
+        <select ng-model="statusFilter">
+          <option value="">All statuses</option>
+          <option value="Open">Open</option>
+          <option value="Scheduled">Scheduled</option>
+          <option value="Closing">Closing</option>
+          <option value="Closed">Closed</option>
+        </select>
+      </div>
+      <div class="field mb-0"><label>Search company or role</label>
+        <input type="text" ng-model="driveSearch" placeholder="e.g. Meridian, analyst">
+      </div>
+    </div>
+  </div>
+
+  <p class="mono" style="font-size:.8rem;color:var(--ink-soft);margin:10px 0 6px;">
+    Showing <span ng-bind="(drives | filter: matchesDriveFilters).length"></span> of <span ng-bind="drives.length"></span> calendar entries
+  </p>
+
+  <div class="table-scroll" style="margin-top:10px;">
+  <table class="ledger">
+    <thead><tr><th>Date</th><th>Company</th><th>Role</th><th>Stage</th><th>Eligibility</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr ng-repeat="d in drives | filter: matchesDriveFilters">
+        <td class="mono" ng-bind="d.date"></td>
+        <td ng-bind="d.company"></td>
+        <td ng-bind="d.role"></td>
+        <td ng-bind="d.stage"></td>
+        <td ng-bind="d.eligibility"></td>
+        <td><span class="stamp {{d.statusClass}}" ng-bind="d.status"></span></td>
+      </tr>
+      <tr ng-if="(drives | filter: matchesDriveFilters).length === 0">
+        <td colspan="6" class="mono" style="color:var(--ink-soft);">No calendar entries match those filters.</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="callout" style="margin-top:24px;">Interview slots are booked from your <a href="student-dashboard.html">dashboard</a> once you're shortlisted &mdash; no separate registration needed.</div>
+
+</div>
+
+</div>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <span class="brand-text" style="color:#fff;">Ridgeview Placement Cell</span>
+      <p style="margin-top:10px;max-width:260px;">The office coordinating internships, placement drives and recruiter relations for every graduating batch.</p>
+    </div>
+    <div>
+      <h4>Portal</h4>
+      <a href="jobs.html">Open roles</a>
+      <a href="drives.html">Upcoming drives</a>
+      <a href="student-dashboard.html">Student dashboard</a>
+    </div>
+    <div>
+      <h4>Recruiters</h4>
+      <a href="admin-dashboard.html">Admin console</a>
+      <a href="admin-companies.html">Manage companies</a>
+      <a href="help.html">Recruiter guidelines</a>
+    </div>
+    <div>
+      <h4>Support</h4>
+      <a href="help.html">FAQ</a>
+      <a href="help.html#contact">Contact the cell</a>
+      <a href="about.html">About us</a>
+    </div>
+  </div>
+  <div class="footer-bottom">Placement Cell Office, Block C, Ridgeview College &middot; Mon&ndash;Sat 9:00&ndash;17:30 &middot; Reg. Portal v3.2</div>
+</footer>
+<script src="js/main.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+<script src="js/angular-app.js"></script>
+</body>
+</html>

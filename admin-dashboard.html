@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Console — Ridgeview College Placement Cell</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-require-role="recruiter,admin">
+<script src="js/auth.js"></script>
+<header class="site-header">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <span class="badge">RC</span>
+      <span class="brand-text">Ridgeview Placement Cell<small>Placement Cell — Admin Console</small></span>
+    </a>
+    <nav class="tab-nav"><a href="index.html" class="">Home</a><a href="about.html" class="">About</a><a href="jobs.html" class="">Jobs</a><a href="drives.html" class="">Drives</a><a href="help.html" class="">Help</a></nav>
+    <div class="nav-cta">
+      <a href="index.html" class="btn btn-outline on-dark btn-sm">Exit admin</a>
+        <a href="admin-dashboard.html" class="avatar" style="width:36px;height:36px;font-size:.85rem;background:#c8d0e0;" title="Placement Cell Admin">PC</a>
+      <button class="hamburger btn btn-outline on-dark btn-sm" aria-label="Menu">&#9776;</button>
+    </div>
+  </div>
+</header>
+<main class="page-body">
+<div class="wrap">
+
+<div class="dash">
+  
+<div class="side-nav">
+  <a href="admin-dashboard.html" class="active">Overview</a>
+  <a href="admin-companies.html" class="">Companies</a>
+  <a href="admin-dashboard.html#students" class="">Students</a>
+  <a href="drives.html" class="">Drive calendar</a>
+  <a href="admin-dashboard.html#reports" class="">Reports</a>
+</div>
+
+  <div>
+    <div class="eyebrow">Placement cell console &middot; signed in as <span data-auth-text="name">—</span></div>
+    <h1>Season overview.</h1>
+
+    <div class="stat-strip" style="border-radius:2px;margin-bottom:30px;">
+      <div class="stat"><div class="num">86</div><div class="label">Companies registered</div></div>
+      <div class="stat"><div class="num">1,204</div><div class="label">Students eligible</div></div>
+      <div class="stat"><div class="num">3,410</div><div class="label">Applications filed</div></div>
+      <div class="stat"><div class="num">612</div><div class="label">Offers rolled out</div></div>
+    </div>
+
+    <section id="students" class="section" style="padding-top:0;">
+      <div class="section-head">
+        <h2 style="margin:0;">Recent applications</h2>
+        <a href="admin-companies.html" class="btn btn-outline btn-sm">Manage companies &rarr;</a>
+      </div>
+      <div class="table-scroll">
+        <table class="ledger">
+          <thead><tr><th>Student</th><th>Roll no.</th><th>Company</th><th>Role</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Ananya Rao</td><td class="mono">22CS1042</td><td>Meridian Tech</td><td>Software Engineer</td><td><span class="stamp stamp-shortlisted">Shortlisted</span></td></tr>
+            <tr><td>Rohan Iyer</td><td class="mono">22CS0987</td><td>QuantStack</td><td>Backend Developer</td><td><span class="stamp stamp-applied">Applied</span></td></tr>
+            <tr><td>Divya Menon</td><td class="mono">22IT1120</td><td>Harborview Analytics</td><td>Data Analyst</td><td><span class="stamp stamp-selected">Selected</span></td></tr>
+            <tr><td>Kabir Shah</td><td class="mono">22ME0456</td><td>Fenwick Logistics</td><td>Ops Trainee</td><td><span class="stamp stamp-rejected">Not selected</span></td></tr>
+            <tr><td>Priya Nair</td><td class="mono">22EC0321</td><td>Orbitpoint Semiconductors</td><td>VLSI Design Engineer</td><td><span class="stamp stamp-selected">Selected</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="reports" class="section" style="padding-top:10px;">
+      <h2>By department</h2>
+      <div class="grid-2">
+        <div class="panel"><strong>CSE / IT</strong><div class="progress-track" style="margin:10px 0 6px;"><div class="progress-fill" style="width:91%;"></div></div><span class="mono" style="font-size:.75rem;color:var(--ink-soft);">91% placed</span></div>
+        <div class="panel"><strong>ECE / EEE</strong><div class="progress-track" style="margin:10px 0 6px;"><div class="progress-fill" style="width:78%;"></div></div><span class="mono" style="font-size:.75rem;color:var(--ink-soft);">78% placed</span></div>
+        <div class="panel"><strong>Mechanical / Production</strong><div class="progress-track" style="margin:10px 0 6px;"><div class="progress-fill" style="width:64%;"></div></div><span class="mono" style="font-size:.75rem;color:var(--ink-soft);">64% placed</span></div>
+        <div class="panel"><strong>Civil</strong><div class="progress-track" style="margin:10px 0 6px;"><div class="progress-fill" style="width:58%;"></div></div><span class="mono" style="font-size:.75rem;color:var(--ink-soft);">58% placed</span></div>
+      </div>
+    </section>
+  </div>
+</div>
+</div>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <span class="brand-text" style="color:#fff;">Ridgeview Placement Cell</span>
+      <p style="margin-top:10px;max-width:260px;">The office coordinating internships, placement drives and recruiter relations for every graduating batch.</p>
+    </div>
+    <div>
+      <h4>Portal</h4>
+      <a href="jobs.html">Open roles</a>
+      <a href="drives.html">Upcoming drives</a>
+      <a href="student-dashboard.html">Student dashboard</a>
+    </div>
+    <div>
+      <h4>Recruiters</h4>
+      <a href="admin-dashboard.html">Admin console</a>
+      <a href="admin-companies.html">Manage companies</a>
+      <a href="help.html">Recruiter guidelines</a>
+    </div>
+    <div>
+      <h4>Support</h4>
+      <a href="help.html">FAQ</a>
+      <a href="help.html#contact">Contact the cell</a>
+      <a href="about.html">About us</a>
+    </div>
+  </div>
+  <div class="footer-bottom">Placement Cell Office, Block C, Ridgeview College &middot; Mon&ndash;Sat 9:00&ndash;17:30 &middot; Reg. Portal v3.2</div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>

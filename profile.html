@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile — Ridgeview College Placement Cell</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-require-role="student">
+<script src="js/auth.js"></script>
+<header class="site-header">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <span class="badge">RC</span>
+      <span class="brand-text">Ridgeview Placement Cell<small>Student &amp; Recruiter Portal</small></span>
+    </a>
+    <nav class="tab-nav"><a href="index.html" class="">Home</a><a href="about.html" class="">About</a><a href="jobs.html" class="">Jobs</a><a href="drives.html" class="">Drives</a><a href="help.html" class="">Help</a></nav>
+    <div class="nav-cta">
+      <a href="notifications.html" class="btn btn-outline on-dark btn-sm">Notifications</a>
+        <a href="student-dashboard.html" class="avatar" style="width:36px;height:36px;font-size:.85rem;" title="Ananya Rao">AR</a>
+      <button class="hamburger btn btn-outline on-dark btn-sm" aria-label="Menu">&#9776;</button>
+    </div>
+  </div>
+</header>
+<main class="page-body">
+<div class="wrap">
+
+<div class="dash">
+  
+<div class="side-nav">
+  <a href="student-dashboard.html" class="">Overview</a>
+  <a href="student-dashboard.html#applications" class="">Applications</a>
+  <a href="profile.html" class="active">Profile</a>
+  <a href="resume-builder.html" class="">Resume builder</a>
+  <a href="notifications.html" class="">Notifications</a>
+  <a href="drives.html" class="">Drive calendar</a>
+</div>
+
+  <div>
+    <div class="eyebrow">Student file &middot; <span data-auth-text="rollNumber">—</span></div>
+    <h1>Your profile.</h1>
+    <p style="color:var(--ink-soft);">This is what recruiters see against your applications. Keep it current &mdash; changes apply to every pending application.</p>
+
+    <div class="sheet wide" style="margin-top:10px;">
+      <form data-auth-form="profile" novalidate>
+        <h3 style="margin-bottom:16px;">Personal</h3>
+        <div class="field-row">
+          <div class="field"><label>Full name</label><input type="text" name="fullName" data-auth-value="name" data-validate="required"></div>
+          <div class="field"><label>Roll number</label><input type="text" data-auth-value="rollNumber" disabled></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>College email</label><input type="email" data-auth-value="email" disabled></div>
+          <div class="field"><label>Phone number</label><input type="tel" name="phone" data-auth-value="phone" data-validate="required phone"></div>
+        </div>
+
+        <h3 style="margin:26px 0 16px;">Academic</h3>
+        <div class="field-row">
+          <div class="field"><label>Branch</label><input type="text" data-auth-value="branch" disabled></div>
+          <div class="field"><label>Graduating year</label><input type="text" data-auth-value="gradYear" disabled></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Current CGPA</label><input type="text" name="cgpa" data-auth-value="cgpa" data-validate="required cgpa"></div>
+          <div class="field"><label>Active backlogs</label><input type="text" name="backlogs" data-auth-value="backlogs" data-validate="required integerMin0"></div>
+        </div>
+
+        <h3 style="margin:26px 0 16px;">Skills</h3>
+        <div class="field"><label>Skills (comma separated)</label><input type="text" name="skills" data-auth-value="skills" placeholder="e.g. Java, React, SQL" data-validate="required"></div>
+
+        <h3 style="margin:26px 0 16px;">Resume</h3>
+        <div class="panel" style="display:flex;align-items:center;justify-content:space-between;background:var(--paper-raised);margin-bottom:20px;">
+          <div><strong class="mono" style="font-size:.85rem;" data-auth-text="resumeName">No resume on file yet</strong><div class="mono" style="font-size:.72rem;color:var(--ink-soft);">Uploaded from the resume builder</div></div>
+          <a href="resume-builder.html" class="btn btn-outline btn-sm">Update via builder</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save changes</button>
+        <div data-submit-note class="callout" style="display:none;margin-top:16px;"></div>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var form = document.querySelector('form[data-auth-form="profile"]');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (window.PortalValidation && !PortalValidation.validateForm(form)) return;
+
+    var result = PortalAuth.updateCurrentUser({
+      name: form.fullName.value,
+      phone: form.phone.value,
+      cgpa: form.cgpa.value,
+      backlogs: form.backlogs.value,
+      skills: form.skills.value
+    });
+    var note = form.querySelector('[data-submit-note]');
+    if (!result.ok) {
+      note.className = 'callout callout-error';
+      note.textContent = result.error;
+      note.style.display = 'block';
+      return;
+    }
+    PortalAuth.renderAuthNav();
+    note.className = 'callout callout-success';
+    note.textContent = 'Saved. Your changes now apply to the whole portal.';
+    note.style.display = 'block';
+  });
+});
+</script>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <span class="brand-text" style="color:#fff;">Ridgeview Placement Cell</span>
+      <p style="margin-top:10px;max-width:260px;">The office coordinating internships, placement drives and recruiter relations for every graduating batch.</p>
+    </div>
+    <div>
+      <h4>Portal</h4>
+      <a href="jobs.html">Open roles</a>
+      <a href="drives.html">Upcoming drives</a>
+      <a href="student-dashboard.html">Student dashboard</a>
+    </div>
+    <div>
+      <h4>Recruiters</h4>
+      <a href="admin-dashboard.html">Admin console</a>
+      <a href="admin-companies.html">Manage companies</a>
+      <a href="help.html">Recruiter guidelines</a>
+    </div>
+    <div>
+      <h4>Support</h4>
+      <a href="help.html">FAQ</a>
+      <a href="help.html#contact">Contact the cell</a>
+      <a href="about.html">About us</a>
+    </div>
+  </div>
+  <div class="footer-bottom">Placement Cell Office, Block C, Ridgeview College &middot; Mon&ndash;Sat 9:00&ndash;17:30 &middot; Reg. Portal v3.2</div>
+</footer>
+<script src="js/main.js"></script>
+<script src="js/validation.js"></script>
+</body>
+</html>

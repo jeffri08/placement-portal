@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="placementApp">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Dashboard — Ridgeview College Placement Cell</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-require-role="student">
+<script src="js/auth.js"></script>
+<header class="site-header">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <span class="badge">RC</span>
+      <span class="brand-text">Ridgeview Placement Cell<small>Student &amp; Recruiter Portal</small></span>
+    </a>
+    <nav class="tab-nav"><a href="index.html" class="">Home</a><a href="about.html" class="">About</a><a href="jobs.html" class="">Jobs</a><a href="drives.html" class="">Drives</a><a href="help.html" class="">Help</a></nav>
+    <div class="nav-cta">
+      <a href="notifications.html" class="btn btn-outline on-dark btn-sm">Notifications</a>
+        <a href="student-dashboard.html" class="avatar" style="width:36px;height:36px;font-size:.85rem;" title="Ananya Rao">AR</a>
+      <button class="hamburger btn btn-outline on-dark btn-sm" aria-label="Menu">&#9776;</button>
+    </div>
+  </div>
+</header>
+<main class="page-body">
+<div class="wrap">
+
+<div class="dash">
+  
+<div class="side-nav">
+  <a href="student-dashboard.html" class="active">Overview</a>
+  <a href="student-dashboard.html#applications" class="">Applications</a>
+  <a href="profile.html" class="">Profile</a>
+  <a href="resume-builder.html" class="">Resume builder</a>
+  <a href="notifications.html" class="">Notifications</a>
+  <a href="drives.html" class="">Drive calendar</a>
+</div>
+
+  <div ng-controller="DashboardController">
+    <div class="eyebrow">Student file &middot; <span data-auth-text="rollNumber">—</span></div>
+    <h1>Welcome back, <span data-auth-text="firstName">there</span>.</h1>
+
+    <div class="panel" style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div class="avatar" data-auth-text="initials">?</div>
+        <div>
+          <strong data-auth-text="name">—</strong>
+          <div class="mono" style="font-size:.78rem;color:var(--ink-soft);" data-auth-text="meta"></div>
+        </div>
+      </div>
+      <div>
+        <div class="mono" style="font-size:.72rem;color:var(--ink-soft);margin-bottom:4px;">Eligibility profile</div>
+        <div class="progress-track" style="width:220px;"><div class="progress-fill" style="width:82%;"></div></div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:20px;">
+      <div class="panel">
+        <div class="num" style="font-family:var(--font-display);font-size:1.8rem;color:var(--stamp-blue);" ng-bind="applications.length"></div>
+        <div class="mono" style="font-size:.75rem;color:var(--ink-soft);text-transform:uppercase;">Applications on file</div>
+      </div>
+      <div class="panel">
+        <div class="num" style="font-family:var(--font-display);font-size:1.8rem;color:var(--amber-deep);" ng-bind="countByStatus('Shortlisted')"></div>
+        <div class="mono" style="font-size:.75rem;color:var(--ink-soft);text-transform:uppercase;">Shortlists pending action</div>
+      </div>
+    </div>
+
+    <section id="applications" class="section" style="padding-top:36px;">
+      <div class="section-head" style="align-items:center;">
+        <h2 style="margin:0;">Your applications</h2>
+        <select ng-model="statusFilter" style="width:220px;">
+          <option value="">All statuses</option>
+          <option value="Applied">Applied</option>
+          <option value="Shortlisted">Shortlisted</option>
+          <option value="Selected">Selected</option>
+          <option value="Not selected">Not selected</option>
+        </select>
+      </div>
+      <div class="table-scroll">
+        <table class="ledger">
+          <thead><tr><th>Company</th><th>Role</th><th>Applied</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr ng-repeat="a in applications | filter: {status: statusFilter}">
+              <td ng-bind="a.company"></td>
+              <td ng-bind="a.role"></td>
+              <td class="mono" ng-bind="a.applied"></td>
+              <td><span class="stamp {{a.statusClass}}" ng-bind="a.status"></span></td>
+              <td><a href="job-details.html" class="mono" style="font-size:.8rem;">View file</a></td>
+            </tr>
+            <tr ng-if="(applications | filter: {status: statusFilter}).length === 0">
+              <td colspan="5" class="mono" style="color:var(--ink-soft);">No applications with that status.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="callout" style="margin-top:10px;">Orbitpoint Semiconductors has issued an offer. Head to <a href="notifications.html">notifications</a> to accept or decline before 25 Jul.</div>
+  </div>
+</div>
+</div>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <span class="brand-text" style="color:#fff;">Ridgeview Placement Cell</span>
+      <p style="margin-top:10px;max-width:260px;">The office coordinating internships, placement drives and recruiter relations for every graduating batch.</p>
+    </div>
+    <div>
+      <h4>Portal</h4>
+      <a href="jobs.html">Open roles</a>
+      <a href="drives.html">Upcoming drives</a>
+      <a href="student-dashboard.html">Student dashboard</a>
+    </div>
+    <div>
+      <h4>Recruiters</h4>
+      <a href="admin-dashboard.html">Admin console</a>
+      <a href="admin-companies.html">Manage companies</a>
+      <a href="help.html">Recruiter guidelines</a>
+    </div>
+    <div>
+      <h4>Support</h4>
+      <a href="help.html">FAQ</a>
+      <a href="help.html#contact">Contact the cell</a>
+      <a href="about.html">About us</a>
+    </div>
+  </div>
+  <div class="footer-bottom">Placement Cell Office, Block C, Ridgeview College &middot; Mon&ndash;Sat 9:00&ndash;17:30 &middot; Reg. Portal v3.2</div>
+</footer>
+<script src="js/main.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+<script src="js/angular-app.js"></script>
+</body>
+</html>

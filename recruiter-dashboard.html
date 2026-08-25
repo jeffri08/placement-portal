@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="placementApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruiter Dashboard - Ridgeview Placement Cell</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="js/angular-app.js"></script>
+</head>
+
+<body ng-controller="RecruiterController">
+
+<header class="site-header">
+    <div class="nav-inner">
+
+        <a href="index.html" class="brand">
+            <span class="badge">RC</span>
+
+            <span class="brand-text">
+                Ridgeview Placement Cell
+                <small>Recruiter Portal</small>
+            </span>
+        </a>
+
+        <nav class="tab-nav">
+            <a href="index.html">Home</a>
+            <a href="jobs.html">Jobs</a>
+            <a href="drives.html">Drives</a>
+            <a href="#" class="active">Recruiter</a>
+        </nav>
+
+        <div class="nav-cta">
+            <a href="#" class="btn btn-outline on-dark btn-sm">
+                Notifications
+            </a>
+
+            <a href="#" class="avatar"
+               style="width:38px;height:38px;background:#d2dae8;">
+               MT
+            </a>
+        </div>
+
+    </div>
+</header>
+
+<main class="page-body">
+
+<div class="wrap">
+
+<div class="eyebrow">
+Recruiter Dashboard
+</div>
+
+<h1>
+Welcome {{recruiter.company}}
+</h1>
+
+<p style="color:var(--ink-soft);">
+
+Manage job postings, applications and shortlisted students.
+
+</p>
+
+<!-- Statistics -->
+
+<div class="stat-strip">
+
+<div class="stat">
+
+<div class="num">
+
+{{jobs.length}}
+
+</div>
+
+<div class="label">
+
+Active Jobs
+
+</div>
+
+</div>
+
+<div class="stat">
+
+<div class="num">
+
+{{applications}}
+
+</div>
+
+<div class="label">
+
+Applications
+
+</div>
+
+</div>
+
+<div class="stat">
+
+<div class="num">
+
+{{selected}}
+
+</div>
+
+<div class="label">
+
+Selected
+
+</div>
+
+</div>
+
+<div class="stat">
+
+<div class="num">
+
+{{rejected}}
+
+</div>
+
+<div class="label">
+
+Rejected
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Add Job -->
+
+<div class="sheet" style="margin-top:35px;">
+
+<h2>
+
+Post New Job
+
+</h2>
+
+<div class="field-row">
+
+<div class="field">
+
+<label>
+
+Company
+
+</label>
+
+<input
+type="text"
+ng-model="newJob.company">
+
+</div>
+
+<div class="field">
+
+<label>
+
+Role
+
+</label>
+
+<input
+type="text"
+ng-model="newJob.role">
+
+</div>
+
+</div>
+
+<div class="field-row">
+
+<div class="field">
+
+<label>
+
+Salary (LPA)
+
+</label>
+
+<input
+type="number"
+ng-model="newJob.salary">
+
+</div>
+
+<div class="field">
+
+<label>
+
+Location
+
+</label>
+
+<input
+type="text"
+ng-model="newJob.location">
+
+</div>
+
+</div>
+
+<div class="field-row">
+
+<div class="field">
+
+<label>
+
+Eligibility
+
+</label>
+
+<input
+type="text"
+placeholder="CSE / IT"
+ng-model="newJob.branch">
+
+</div>
+
+<div class="field">
+
+<label>
+
+CGPA
+
+</label>
+
+<input
+type="number"
+ng-model="newJob.cgpa">
+
+</div>
+
+</div>
+
+<button
+class="btn btn-primary"
+ng-click="addJob()">
+
+Post Job
+
+</button>
+
+</div>
+
+<!-- Search -->
+
+<div class="section">
+
+<div class="section-head">
+
+<h2>
+
+Manage Jobs
+
+</h2>
+
+</div>
+
+<input
+type="text"
+class="search-box"
+placeholder="Search company..."
+
+ng-model="searchJob">
+
+<br><br>
+
+<table class="ledger">
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+
+<th>Company</th>
+
+<th>Role</th>
+
+<th>Salary</th>
+
+<th>Location</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr ng-repeat="job in jobs | filter:searchJob | orderBy:'company'">
+
+<td>
+
+{{job.id}}
+
+</td>
+
+<td>
+
+{{job.company | uppercase}}
+
+</td>
+
+<td>
+
+{{job.role}}
+
+</td>
+
+<td>
+
+{{job.salary | currency:"₹"}}
+
+</td>
+
+<td>
+
+{{job.location}}
+
+</td>
+
+<td>
+
+<button
+class="btn btn-outline btn-sm"
+ng-click="editJob(job)">
+
+Edit
+
+</button>
+
+<button
+class="btn btn-primary btn-sm"
+style="margin-left:8px;background:#d9534f;"
+
+ng-click="deleteJob(job.id)">
+
+Delete
+
+</button>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<!-- Edit Job -->
+
+<div class="sheet">
+
+<h2>
+
+Update Job
+
+</h2>
+
+<div class="field-row">
+
+<div class="field">
+
+<label>
+
+Company
+
+</label>
+
+<input
+type="text"
+ng-model="selectedJob.company">
+
+</div>
+
+<div class="field">
+
+<label>
+
+Role
+
+</label>
+
+<input
+type="text"
+ng-model="selectedJob.role">
+
+</div>
+
+</div>
+
+<div class="field-row">
+
+<div class="field">
+
+<label>
+
+Salary
+
+</label>
+
+<input
+type="number"
+ng-model="selectedJob.salary">
+
+</div>
+
+<div class="field">
+
+<label>
+
+Location
+
+</label>
+
+<input
+type="text"
+ng-model="selectedJob.location">
+
+</div>
+
+</div>
+
+<button
+class="btn btn-primary"
+
+ng-click="updateJob()">
+
+Update Job
+
+</button>
+
+</div>
+
+</div>
+
+</main>
+
+</body>
+</html>
